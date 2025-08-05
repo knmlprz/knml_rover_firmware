@@ -17,24 +17,31 @@ RosCommunication::RosCommunication(){
 }
 
 void RosCommunication::initialize(){
-     // Configure serial transport
-     Serial.begin(115200);
-     // set_microros_serial_transports(Serial);
-     // Adding Wifi
-     IPAddress agent_ip(192, 168, 223, 64);
-     size_t agent_port = 8888;
+
+    // Configure serial transport
+    //
+    Serial.begin(115200);
+    set_microros_serial_transports(Serial);
+    //
+
+    // Adding Wifi
+    //
+    // IPAddress agent_ip(192, 168, 223, 64);
+    // size_t agent_port = 8888;
  
-     char ssid[] = "ssid";
-     char psk[]= "psk";
+    // char ssid[] = "ssid";
+    // char psk[]= "psk";
  
-     set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
-     delay(2000);
-     allocator = rcl_get_default_allocator();
+    // set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+    //
+
+    delay(2000);
+    allocator = rcl_get_default_allocator();
  
-     //create init_options
-     rclc_support_init(&support, 0, NULL, &allocator);
-     // create node
-     rclc_node_init_default(&node, "micro_controler_cmd_vel", "", &support);
+    //create init_options
+    rclc_support_init(&support, 0, NULL, &allocator);
+    // create node
+    rclc_node_init_default(&node, "micro_controler_cmd_vel", "", &support);
 }
 
 void RosCommunication::executors_start(){

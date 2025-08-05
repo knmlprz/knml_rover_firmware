@@ -49,10 +49,89 @@ ros2 run micro_ros_setup build_agent.sh
 source install/local_setup.bash
 ```
 
+## for wifi setup
+
+uncomment followed lines of code in file `lib/ros_communication/ros_communication.cpp` 
+
+```cpp
+IPAddress agent_ip(192, 168, 223, 64);
+size_t agent_port = 8888;
+ 
+char ssid[] = "ssid";
+char psk[]= "psk";
+ 
+set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+```
+
+change:
+- `agent_ip(192, 168, 223, 64)` - set ip of device where will be launched micro_ros agent (for example your computer)
+- `agent_port` - if required 
+- `ssid` and `psk` of your wifi 
+
+comment followed lines of code in file `lib/ros_communication/ros_communication.cpp` 
+
+```cpp
+// Serial.begin(115200);
+// set_microros_serial_transports(Serial);
+```
+
+
+uncomment followed lines of code in file `platformio.ini`
+
+```ini
+board_microros_transport = wifi
+```
+
+comment followed lines of code in file `platformio.ini`
+
+```ini
+; board_microros_transport = serial
+```
+
+After build and upload - test it
 ```bash
 ros2 run micro_ros_agent micro_ros_agent udp4 --port 8888
 ```
 
+## for serial setup
+
+uncomment followed lines of code in file `lib/ros_communication/ros_communication.cpp` 
+
+```cpp
+Serial.begin(115200);
+set_microros_serial_transports(Serial);
+```
+
+comment followed lines of code in file `lib/ros_communication/ros_communication.cpp` 
+
+```cpp
+// IPAddress agent_ip(192, 168, 223, 64);
+// size_t agent_port = 8888;
+ 
+// char ssid[] = "ssid";
+// char psk[]= "psk";
+ 
+// set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+```
+
+uncomment followed lines of code in file `platformio.ini`
+
+```ini
+board_microros_transport = serial
+```
+
+comment followed lines of code in file `platformio.ini`
+
+```ini
+; board_microros_transport = wifi
+```
+
+After build and upload - test it
+```bash
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0 -b 115200
+```
+
+# driving test
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard 
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/cmd_vel_nav
